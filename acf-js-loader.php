@@ -55,9 +55,6 @@ class themestrap_ext_acf_field_js_loaders {
 
 
 	function my_acf_json_load_point( $paths ) {
-    // remove original path (optional)
-    unset($paths[0]);
-    
     // append path
     $paths[] = __DIR__ . '/json';
     
