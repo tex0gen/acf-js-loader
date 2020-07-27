@@ -36,9 +36,7 @@ class themestrap_ext_acf_field_js_loaders {
 	*  @param	void
 	*  @return	void
 	*/
-	
 	function __construct() {
-		
 		// settings
 		// - these will be passed into the field class.
 		$this->settings = array(
@@ -49,8 +47,22 @@ class themestrap_ext_acf_field_js_loaders {
 		
 		
 		// include field
-		add_action('acf/include_field_types', 	array($this, 'include_field')); // v5
-		add_action('acf/register_fields', 		array($this, 'include_field')); // v4
+		add_action('acf/include_field_types', array($this, 'include_field')); // v5
+		// add_action('acf/register_fields', 		array($this, 'include_field')); // v4
+
+		add_filter('acf/settings/load_json', array($this, 'my_acf_json_load_point'));
+	}
+
+
+	function my_acf_json_load_point( $paths ) {
+    // remove original path (optional)
+    unset($paths[0]);
+    
+    // append path
+    $paths[] = __DIR__ . '/json';
+    
+    // return
+    return $paths;
 	}
 	
 	
@@ -67,24 +79,17 @@ class themestrap_ext_acf_field_js_loaders {
 	*  @return	void
 	*/
 	
-	function include_field( $version = 4 ) {
-		
+	function include_field() {
 		// load textdomain
 		load_plugin_textdomain( 'TEXTDOMAIN', false, plugin_basename( dirname( __FILE__ ) ) . '/lang' ); 
 		
-		
 		// include
-		include_once( plugin_dir_path( __FILE__ ) . 'fields/class-js-loader-ext-v' . $version . '.php');
+		include_once( plugin_dir_path( __FILE__ ) . 'fields/class-js-loader-ext-v5.php');
 	}
-	
 }
-
 
 // initialize
 new themestrap_ext_acf_field_js_loaders();
 
-
 // class_exists check
 endif;
-	
-?>
