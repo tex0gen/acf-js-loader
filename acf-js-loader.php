@@ -51,6 +51,19 @@ class themestrap_ext_acf_field_js_loaders {
 		// add_action('acf/register_fields', 		array($this, 'include_field')); // v4
 
 		add_filter('acf/settings/load_json', array($this, 'my_acf_json_load_point'));
+
+		add_action( 'wp_enqueue_scripts', array($this, 'themestrap_enqueue_styles'), 5 );
+	}
+
+	function themestrap_enqueue_styles() {
+    global $post;
+    $js_to_enqueue = get_field('javascript', $post->ID);
+
+    if ( $js_to_enqueue ) {
+      foreach ( $js_to_enqueue as $key => $file ) {
+        wp_enqueue_script( str_replace('.', '', $file['js_loader']), get_template_directory_uri() . '/assets/build/js/selectable/'.$file['js_loader'], array('jquery'), null, true );
+      }
+    }
 	}
 
 
